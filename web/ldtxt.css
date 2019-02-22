@@ -1,3 +1,4 @@
 .ldtxt span {
   display: inline-block;
+  white-space: pre;
 }

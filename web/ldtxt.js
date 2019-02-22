@@ -21,25 +21,34 @@
       return this.text = it || " ... oi.loading.io ...";
     },
     prepare: function(){
-      var nodes, c, i$, to$, i, idx, a, cls, ani;
+      var nodes, text, c, ref$, _, i$, to$, i, idx, a, cls, ani, dur, lat, delay;
       nodes = [];
+      text = this.text;
       c = this.colors;
-      for (i$ = 0, to$ = this.text.length; i$ < to$; ++i$) {
+      if (this.opt.byWord) {
+        ref$ = [[], this.text.split(' ')], text = ref$[0], _ = ref$[1];
+        _ = this.text.split(' ');
+        for (i$ = 0, to$ = _.length; i$ < to$; ++i$) {
+          i = i$;
+          text.push(_[i]);
+          text.push(' ');
+        }
+      }
+      for (i$ = 0, to$ = text.length; i$ < to$; ++i$) {
         i = i$;
-        nodes.push("<span" + (c ? ' style="color:' + c[i % c.length] + '"' : '') + ">" + this.text[i] + "</span>");
+        nodes.push("<span" + (c ? ' style="color:' + c[i % c.length] + '"' : '') + ">" + text[i] + "</span>");
       }
       for (i$ = 0, to$ = this.animations.length; i$ < to$; ++i$) {
         idx = i$;
         a = this.animations[idx];
-        cls = a.className;
-        ani = a.animation;
+        ref$ = [a.className, a.animation, a.duration, a.latency, a.delay], cls = ref$[0], ani = ref$[1], dur = ref$[2], lat = ref$[3], delay = ref$[4];
         nodes = nodes.map(fn$);
       }
       return this.root.innerHTML = nodes.join('');
       function fn$(d, i){
-        var delay;
-        delay = (a.latency || 1) * i / nodes.length;
-        return "<span class=\"" + cls + "\" style=\"\n" + (ani ? 'animation:' + ani + ';' : '') + "animation-delay:" + delay + "s\">" + d + "</span>";
+        var _delay;
+        _delay = (delay || 0) + (lat || 1) * i / nodes.length;
+        return "<span class=\"" + cls + "\" style=\"\n" + (ani ? 'animation:' + ani + ';' : '') + "animation-delay:" + _delay + "s;\n" + (dur ? 'animation-duration:' + dur + 's;' : '') + "\">" + d + "</span>";
       }
     }
   });
